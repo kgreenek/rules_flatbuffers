@@ -1,0 +1,23 @@
+namespace geom_fbs;
+
+struct Vector2f {
+  x : float;
+  y : float;
+}
+
+struct Vector2d {
+  x : double;
+  y : double;
+}
+
+struct Vector3f {
+  x : float;
+  y : float;
+  z : float;
+}
+
+struct Vector3d {
+  x : double;
+  y : double;
+  z : double;
+}

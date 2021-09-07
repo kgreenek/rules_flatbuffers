@@ -1,0 +1,15 @@
+namespace geom_fbs;
+
+struct Quaternionf {
+  x : float;
+  y : float;
+  z : float;
+  w : float;
+}
+
+struct Quaterniond {
+  x : double;
+  y : double;
+  z : double;
+  w : double;
+}

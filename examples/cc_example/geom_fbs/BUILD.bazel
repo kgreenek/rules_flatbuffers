@@ -1,0 +1,18 @@
+load("@rules_flatbuffers//flatbuffers:flatbuffers_library.bzl", "flatbuffers_library")
+load("@rules_flatbuffers//flatbuffers:cc_flatbuffers_library.bzl", "cc_flatbuffers_library")
+
+flatbuffers_library(
+    name = "geom_fbs",
+    srcs = [
+        "isometry.fbs",
+        "quaternion.fbs",
+        "vector.fbs",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_flatbuffers_library(
+    name = "geom_cc_fbs",
+    deps = [":geom_fbs"],
+    visibility = ["//visibility:public"],
+)

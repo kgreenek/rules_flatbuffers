@@ -1,0 +1,6 @@
+load("//flatbuffers/toolchains:cc_flatbuffers_toolchain.bzl", "cc_flatbuffers_toolchain")
+
+cc_flatbuffers_toolchain(
+    name = "default_cc_flatbuffers_toolchain",
+    visibility = ["//visibility:public"],
+)

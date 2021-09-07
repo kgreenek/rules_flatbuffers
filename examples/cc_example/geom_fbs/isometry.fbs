@@ -1,0 +1,24 @@
+include "geom_fbs/quaternion.fbs";
+include "geom_fbs/vector.fbs";
+
+namespace geom_fbs;
+
+struct Isometry2f {
+  translation : Vector2f;
+  rotation : float;
+}
+
+struct Isometry2d {
+  translation : Vector2d;
+  rotation : double;
+}
+
+struct Isometry3f {
+  translation : Vector3f;
+  rotation : Quaternionf;
+}
+
+struct Isometry3d {
+  translation : Vector3d;
+  rotation : Quaterniond;
+}

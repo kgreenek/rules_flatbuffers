@@ -1,0 +1,11 @@
+workspace(name = "rules_flatbuffers_cc_example")
+
+# In your WORKSPACE file, you'll make this an http_archive instead. See README.md.
+local_repository(
+    name = "rules_flatbuffers",
+    path = "../..",
+)
+
+load("@rules_flatbuffers//flatbuffers:repositories.bzl", "flatbuffers_dependencies")
+
+flatbuffers_dependencies()

@@ -1,0 +1,7 @@
+include "geom_fbs/isometry.fbs";
+
+namespace viz_fbs;
+
+table Marker {
+  pose: geom_fbs.Isometry3f;
+}
