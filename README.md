@@ -54,7 +54,7 @@ cc_flatbuffers_library(
 )
 ```
 
-Language targets can only depend on existing flatbuffers libraries, they cannot generates code directly from fbs sources.
+Language targets can only depend on existing flatbuffers libraries.
 
 ## Full examples
 
