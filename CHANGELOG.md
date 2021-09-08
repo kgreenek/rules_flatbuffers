@@ -7,11 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 IMPORTANT: Prior to 1.0.0, minor versions may contain API-breaking changes.
 
 ## [Unreleased]
+### Added
+- Add .bazelversion file to cc_example
 ### Changed
 - Factor common code into run_flatc function
 - Add lang_shortname to FlatbuffersLangToolchain provider
 ### Removed
-- Removed toolchain arg from cc_flatbuffers_library rule
+- Remove toolchain arg from cc_flatbuffers_library rule
+- Remove gen-compare flag from cc toolchain
+### Fixed
+- Properly add generated schema files to runfiles
 
 ## [0.1.0] - 2021-09-07
 ### Added
