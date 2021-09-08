@@ -1,3 +1,5 @@
+load("//flatbuffers/private:string_utils.bzl", "capitalize_first_char")
+
 def _include_args_from_depset(includes_depset):
     # Always include the workspace root.
     include_args = ["-I", "."]
@@ -5,13 +7,6 @@ def _include_args_from_depset(includes_depset):
         include_args.append("-I")
         include_args.append(include)
     return include_args
-
-def _capitalize_first_char(string):
-    if len(string) == 0:
-        return string
-    if len(string) == 1:
-        return string.upper()
-    return string[0].upper() + string[1:]
 
 def run_flatc(
         ctx,
@@ -23,7 +18,7 @@ def run_flatc(
     flatc = toolchain.flatc.files_to_run.executable
     include_args = _include_args_from_depset(includes_transitive)
     output_prefix = ctx.genfiles_dir.path + "/" + ctx.label.package
-    mnemonic = "Flatbuffers%sGen" % _capitalize_first_char(toolchain.lang_shortname)
+    mnemonic = "Flatbuffers{}Gen".format(capitalize_first_char(toolchain.lang_shortname))
     progress_message = "Generating flatbuffers {} file for {}:".format(
         toolchain.lang_shortname,
         ctx.label,

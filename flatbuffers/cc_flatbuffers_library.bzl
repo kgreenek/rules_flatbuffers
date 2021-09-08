@@ -1,6 +1,7 @@
 load("//flatbuffers:flatbuffers_lang_toolchain.bzl", "FlatbuffersLangToolchainInfo")
 load("//flatbuffers:flatbuffers_library.bzl", "FlatbuffersInfo")
 load("//flatbuffers/private:run_flatc.bzl", "run_flatc")
+load("//flatbuffers/private:string_utils.bzl", "replace_extension")
 load("//flatbuffers/toolchains:cc_flatbuffers_toolchain.bzl", "DEFAULT_TOOLCHAIN")
 
 DEFAULT_SUFFIX = "_generated"
@@ -13,12 +14,9 @@ FlatbuffersCcInfo = provider(fields = {
     "includes_transitive": "depset of includes",
 })
 
-def _cc_filename(string, old_extension, new_extension, suffix):
-    return string.rpartition(old_extension)[0][:-1] + suffix + "." + new_extension
-
 def _flatbuffers_cc_info_aspect_impl(target, ctx):
     headers = [
-        ctx.actions.declare_file(_cc_filename(
+        ctx.actions.declare_file(replace_extension(
             string = src.basename,
             old_extension = src.extension,
             new_extension = CC_HEADER_FILE_EXTENSION,
@@ -26,9 +24,6 @@ def _flatbuffers_cc_info_aspect_impl(target, ctx):
         ))
         for src in target[FlatbuffersInfo].srcs
     ]
-    includes_transitive = depset(
-        transitive = [dep[FlatbuffersInfo].includes_transitive for dep in ctx.rule.attr.deps],
-    )
     headers_transitive = depset(
         direct = headers,
         transitive = [dep[FlatbuffersCcInfo].headers_transitive for dep in ctx.rule.attr.deps],
@@ -38,7 +33,7 @@ def _flatbuffers_cc_info_aspect_impl(target, ctx):
         toolchain = ctx.attr._toolchain[FlatbuffersLangToolchainInfo],
         srcs = target[FlatbuffersInfo].srcs,
         srcs_transitive = target[FlatbuffersInfo].srcs_transitive,
-        includes_transitive = includes_transitive,
+        includes_transitive = target[FlatbuffersInfo].includes_transitive,
         outputs = headers,
     )
 
@@ -66,6 +61,7 @@ def _cc_flatbuffers_genrule_impl(ctx):
         ),
     )
     return [
+        DefaultInfo(files = headers_transitive),
         cc_common.merge_cc_infos(
             direct_cc_infos = [cc_info],
             cc_infos = [toolchain.runtime[CcInfo]],

@@ -1,5 +1,6 @@
 load("//flatbuffers:flatbuffers_lang_toolchain.bzl", "FlatbuffersLangToolchainInfo")
 load("//flatbuffers/private:run_flatc.bzl", "run_flatc")
+load("//flatbuffers/private:string_utils.bzl", "replace_extension")
 load("//flatbuffers/toolchains:schema_flatbuffers_toolchain.bzl", "DEFAULT_TOOLCHAIN")
 
 FlatbuffersInfo = provider(fields = {
@@ -13,9 +14,6 @@ FlatbuffersInfo = provider(fields = {
 
 SCHEMA_FILE_EXTENSION = "bfbs"
 
-def _replace_extension(string, old_extension, new_extension):
-    return string.rpartition(old_extension)[0] + new_extension
-
 def _flatbuffers_library_impl(ctx):
     srcs_transitive = depset(
         direct = ctx.files.srcs,
@@ -26,7 +24,7 @@ def _flatbuffers_library_impl(ctx):
         transitive = [dep[FlatbuffersInfo].includes_transitive for dep in ctx.attr.deps],
     )
     schema_files = [
-        ctx.actions.declare_file(_replace_extension(
+        ctx.actions.declare_file(replace_extension(
             string = src.basename,
             old_extension = src.extension,
             new_extension = SCHEMA_FILE_EXTENSION,
@@ -47,7 +45,13 @@ def _flatbuffers_library_impl(ctx):
     )
 
     return [
-        DefaultInfo(files = schema_files_transitive),
+        DefaultInfo(
+            files = schema_files_transitive,
+            runfiles = ctx.runfiles(
+                files = schema_files,
+                transitive_files = schema_files_transitive,
+            ),
+        ),
         FlatbuffersInfo(
             srcs = ctx.files.srcs,
             srcs_transitive = srcs_transitive,
