@@ -35,7 +35,6 @@ load("@rules_flatbuffers//flatbuffers:flatbuffers_library.bzl", "flatbuffers_lib
 flatbuffers_library(
     name = "foo_fbs",
     srcs = ["foo.fbs"],
-    visibility = ["//visibility:public"],
 )
 ```
 
@@ -47,7 +46,6 @@ For example, if we create a second fbs file called bar.fbs that includes foo.fbs
 flatbuffers_library(
     name = "bar_fbs",
     srcs = ["bar.fbs"],
-    visibility = ["//visibility:public"],
     deps = [
         ":foo_fbs",
     ],
@@ -66,7 +64,6 @@ load("@rules_flatbuffers//flatbuffers:cc_flatbuffers_library.bzl", "cc_flatbuffe
 cc_flatbuffers_library(
     name = "foo_cc_fbs",
     deps = [":foo_fbs"],
-    visibility = ["//visibility:public"],
 )
 ```
 
