@@ -63,7 +63,9 @@ load("@rules_flatbuffers//flatbuffers:cc_flatbuffers_library.bzl", "cc_flatbuffe
 
 cc_flatbuffers_library(
     name = "foo_cc_fbs",
-    deps = [":foo_fbs"],
+    deps = [
+        ":foo_fbs",
+    ],
 )
 ```
 
