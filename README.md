@@ -27,7 +27,7 @@ flatbuffers_dependencies()
 
 ### Create a flatbuffers_library
 
-These targets define the dependency relationships between your flatbuffers files, which is used by all the other language-specific rules. In order to import an fbs file from another fbs file, it must be in the same flatbuffers_library or be listed in the deps field of the parent flatbuffers_library.
+These targets define the dependency relationships between your flatbuffers files, which is used by all the other language-specific rules.
 
 ```bzl
 load("@rules_flatbuffers//flatbuffers:flatbuffers_library.bzl", "flatbuffers_library")
@@ -38,6 +38,23 @@ flatbuffers_library(
     visibility = ["//visibility:public"],
 )
 ```
+
+In order to import an fbs file from one flatbuffers_library from another fbs file in a different flatbuffers_library, the former must be listed in the deps of the latter.
+
+For example, if we create a second fbs file called bar.fbs that includes foo.fbs, we might define a flatbuffers_library like so:
+
+```bzl
+flatbuffers_library(
+    name = "bar_fbs",
+    srcs = ["bar.fbs"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":foo_fbs",
+    ],
+)
+```
+
+NOTE: You do not need to create a separate flatbuffers_library for each fbs source file. That is done here for illustration purposes. However, the more granularly you define your flatbuffers_libraries, the better bazel caching will be able to speed up your builds, since it can be smarter about only generating / compiling sources that are actually imported. 
 
 ### Create a C++ flatbuffers library
 
