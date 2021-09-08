@@ -1,6 +1,6 @@
 load("//flatbuffers:flatbuffers_lang_toolchain.bzl", "DEFAULT_FLATC", "flatbuffers_lang_toolchain")
 
-DEFAULT_TOOLCHAIN = "@rules_flatbuffers//flatbuffers/toolchains:default_cc_flatbuffers_toolchain"
+DEFAULT_TOOLCHAIN = "//flatbuffers/toolchains:default_cc_flatbuffers_toolchain"
 
 DEFAULT_LANG_SHORTNAME = "cc"
 DEFAULT_RUNTIME = "@com_github_google_flatbuffers//:flatbuffers"

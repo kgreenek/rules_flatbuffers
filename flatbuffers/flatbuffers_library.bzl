@@ -1,3 +1,7 @@
+load("//flatbuffers:flatbuffers_lang_toolchain.bzl", "FlatbuffersLangToolchainInfo")
+load("//flatbuffers/private:run_flatc.bzl", "run_flatc")
+load("//flatbuffers/toolchains:schema_flatbuffers_toolchain.bzl", "DEFAULT_TOOLCHAIN")
+
 FlatbuffersInfo = provider(fields = {
     "srcs": "srcs fbs files for this target (non-transitive)",
     "srcs_transitive": "depset of fbs files",
@@ -7,18 +11,17 @@ FlatbuffersInfo = provider(fields = {
     "schema_files_transitive": "depset of generated schema files",
 })
 
-DEFAULT_FLATC = "@com_github_google_flatbuffers//:flatc"
 SCHEMA_FILE_EXTENSION = "bfbs"
 
 def _replace_extension(string, old_extension, new_extension):
     return string.rpartition(old_extension)[0] + new_extension
 
 def _flatbuffers_library_impl(ctx):
-    srcs_depset = depset(
+    srcs_transitive = depset(
         direct = ctx.files.srcs,
         transitive = [dep[FlatbuffersInfo].srcs_transitive for dep in ctx.attr.deps],
     )
-    includes_depset = depset(
+    includes_transitive = depset(
         direct = ctx.attr.includes,
         transitive = [dep[FlatbuffersInfo].includes_transitive for dep in ctx.attr.deps],
     )
@@ -30,39 +33,28 @@ def _flatbuffers_library_impl(ctx):
         ))
         for src in ctx.files.srcs
     ]
-    schema_files_depset = depset(
+    schema_files_transitive = depset(
         direct = schema_files,
         transitive = [dep[FlatbuffersInfo].schema_files_transitive for dep in ctx.attr.deps],
     )
-
-    # Always include the workspace root.
-    include_args = ["-I", "."]
-    for include in includes_depset.to_list():
-        include_args.append("-I")
-        include_args.append(include)
-    schema_genrule_args = \
-        ["-b", "--schema"] + \
-        ["-o", ctx.genfiles_dir.path + "/" + ctx.label.package] + \
-        include_args + \
-        [src.path for src in ctx.files.srcs]
-    ctx.actions.run(
-        inputs = srcs_depset,
+    run_flatc(
+        ctx = ctx,
+        toolchain = ctx.attr._toolchain[FlatbuffersLangToolchainInfo],
+        srcs = ctx.files.srcs,
+        srcs_transitive = srcs_transitive,
+        includes_transitive = includes_transitive,
         outputs = schema_files,
-        executable = ctx.executable._flatc,
-        tools = [ctx.executable._flatc],
-        arguments = schema_genrule_args,
-        mnemonic = "FlatbuffersSchemaGen",
-        progress_message = "Generating flatbuffers schema file for %s:" % (ctx.label),
     )
+
     return [
-        DefaultInfo(files = schema_files_depset),
+        DefaultInfo(files = schema_files_transitive),
         FlatbuffersInfo(
             srcs = ctx.files.srcs,
-            srcs_transitive = srcs_depset,
+            srcs_transitive = srcs_transitive,
             includes = ctx.attr.includes,
-            includes_transitive = includes_depset,
+            includes_transitive = includes_transitive,
             schema_files = schema_files,
-            schema_files_transitive = schema_files_depset,
+            schema_files_transitive = schema_files_transitive,
         ),
     ]
 
@@ -71,18 +63,11 @@ flatbuffers_library = rule(
         "srcs": attr.label_list(allow_files = True),
         "deps": attr.label_list(providers = [FlatbuffersInfo]),
         "includes": attr.string_list(),
-        "_flatc": attr.label(
-            default = DEFAULT_FLATC,
-            allow_single_file = True,
-            cfg = "host",
-            executable = True,
+        "_toolchain": attr.label(
+            providers = [FlatbuffersLangToolchainInfo],
+            default = DEFAULT_TOOLCHAIN,
         ),
     },
     output_to_genfiles = True,
     implementation = _flatbuffers_library_impl,
 )
-"""Flatbuffers library
-
-Args:
-  
-"""
