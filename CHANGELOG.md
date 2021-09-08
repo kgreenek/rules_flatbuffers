@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Factor common code into run_flatc function
 - Add lang_shortname to FlatbuffersLangToolchain provider
+### Removed
+- Removed toolchain arg from cc_flatbuffers_library rule
 
 ## [0.1.0] - 2021-09-07
 ### Added
