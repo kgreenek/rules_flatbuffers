@@ -13,9 +13,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "rules_flatbuffers",
-    sha256 = "186cbab97e3346996dc07809e38e94eb23bcf3b292fc7df04e20580566e6e985",
-    strip_prefix = "rules_flatbuffers-c85b17b21149f1a45a125eb8028a8526e4fd71be",
-    urls = [https://github.com/kgreenek/rules_flatbuffers/archive/c85b17b21149f1a45a125eb8028a8526e4fd71be.tar.gz],
+    sha256 = "4df20d833902d7e62521247ec2c01488b5b00e22092403e902be88b7a67f4b3e",
+    strip_prefix = "rules_flatbuffers-0.1.0",
+    urls = [https://github.com/kgreenek/rules_flatbuffers/archive/refs/tags/v0.1.0.tar.gz],
 )
 
 load("@rules_flatbuffers//flatbuffers:repositories.bzl", "flatbuffers_dependencies")
