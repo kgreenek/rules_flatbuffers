@@ -3,12 +3,15 @@ load("//flatbuffers:flatbuffers_lang_toolchain.bzl", "DEFAULT_FLATC", "flatbuffe
 DEFAULT_TOOLCHAIN = "@rules_flatbuffers//flatbuffers/toolchains:default_cc_flatbuffers_toolchain"
 
 DEFAULT_FLATC_ARGS = [
+    # Language flag
     "--cpp",
+    # This is necessary to preserve the directory hierarchy for generated headers to be relative to
+    # the workspace root as bazel expects.
+    "--keep-prefix",
+    # Some reasonable opinionated defaults.
     "--gen-compare",
     "--gen-mutable",
     "--gen-name-strings",
-    "--gen-object-api",
-    "--keep-prefix",
     "--reflect-names",
 ]
 
