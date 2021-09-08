@@ -1,7 +1,6 @@
 # rules_flatbuffers
 
-Bazel rules for using google Flatbuffers.
-https://github.com/google/flatbuffers
+Bazel rules for using google [Flatbuffers](https://github.com/google/flatbuffers)
 
 For a list of release and changes, see the [CHANGELOG](CHANGELOG.md)
 
@@ -53,6 +52,12 @@ cc_flatbuffers_library(
     visibility = ["//visibility:public"],
 )
 ```
+
+Include paths for all generated C++ headers mirror the corresponding fbs file's location in the mono-repo. For example, if you create an fbs file called `//foo/bar/baz.fbs`, the generated hC++ eader will be included like so: `#include "foo/bar/baz_generated.h`.
+
+It is highly recommended to choose namespaces in your fbs files so that they match the bazel workspace hierarchy. This will create consistency in how you use the geneated files across all languages for which sources are generated.
+
+In this case, the namespace in `//foo/bar/baz.fbs` would be declared as `namespace foo.bar;` and the generated C++ class / namespace would be e.g. `::foo::bar::Baz`
 
 Language targets can only depend on existing flatbuffers libraries.
 
