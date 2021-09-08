@@ -2,7 +2,7 @@
 
 Bazel rules for using google [Flatbuffers](https://github.com/google/flatbuffers)
 
-For a list of release and changes, see the [CHANGELOG](CHANGELOG.md)
+For a list of releases and changes see the [CHANGELOG](CHANGELOG.md)
 
 ## Installing
 
