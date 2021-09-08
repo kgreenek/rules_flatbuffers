@@ -75,7 +75,7 @@ It is highly recommended to choose namespaces in your fbs files so that they mat
 
 In this case, the namespace in `//foo/bar/baz.fbs` would be declared as `namespace foo.bar;` and the generated C++ class / namespace would be e.g. `::foo::bar::Baz`
 
-Language targets such as cc_flatbuffers_library can only depend on existing flatbuffers_library targes.
+Language targets such as cc_flatbuffers_library can only depend on existing flatbuffers_library targets.
 
 ## Full examples
 
