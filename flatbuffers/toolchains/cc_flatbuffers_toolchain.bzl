@@ -11,7 +11,6 @@ DEFAULT_FLATC_ARGS = [
     # the workspace root as bazel expects.
     "--keep-prefix",
     # Some reasonable opinionated defaults.
-    "--gen-compare",
     "--gen-mutable",
     "--gen-name-strings",
     "--reflect-names",
