@@ -15,7 +15,7 @@ http_archive(
     name = "rules_flatbuffers",
     sha256 = "4df20d833902d7e62521247ec2c01488b5b00e22092403e902be88b7a67f4b3e",
     strip_prefix = "rules_flatbuffers-0.1.0",
-    urls = [https://github.com/kgreenek/rules_flatbuffers/archive/refs/tags/v0.1.0.tar.gz],
+    urls = ["https://github.com/kgreenek/rules_flatbuffers/archive/refs/tags/v0.1.0.tar.gz"],
 )
 
 load("@rules_flatbuffers//flatbuffers:repositories.bzl", "flatbuffers_dependencies")
