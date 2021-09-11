@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 IMPORTANT: Prior to 1.0.0, minor versions may contain API-breaking changes.
 
 ## [Unreleased]
+
+## [0.2.0] - 2021-09-11
 ### Added
 - Add .bazelversion file to cc_example
 ### Changed
+- Refactor toolchains so they are configured in repository context in the WORKSPACE
 - Factor common code into run_flatc function
 - Add lang_shortname to FlatbuffersLangToolchain provider
 ### Removed
