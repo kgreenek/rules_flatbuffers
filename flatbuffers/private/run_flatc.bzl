@@ -10,21 +10,22 @@ def _include_args_from_depset(includes_depset):
 
 def run_flatc(
         ctx,
-        toolchain,
+        fbs_toolchain,
+        fbs_lang_toolchain,
         srcs,
         srcs_transitive,
         includes_transitive,
         outputs):
-    flatc = toolchain.flatc.files_to_run.executable
+    flatc = fbs_toolchain.flatc.files_to_run.executable
     include_args = _include_args_from_depset(includes_transitive)
     output_prefix = ctx.genfiles_dir.path + "/" + ctx.label.package
-    mnemonic = "Flatbuffers{}Gen".format(capitalize_first_char(toolchain.lang_shortname))
+    mnemonic = "Flatbuffers{}Gen".format(capitalize_first_char(fbs_lang_toolchain.lang_shortname))
     progress_message = "Generating flatbuffers {} file for {}:".format(
-        toolchain.lang_shortname,
+        fbs_lang_toolchain.lang_shortname,
         ctx.label,
     )
     genrule_args = \
-        toolchain.flatc_args + \
+        fbs_lang_toolchain.flatc_args + \
         ["-o", output_prefix] + \
         include_args + \
         [src.path for src in srcs]

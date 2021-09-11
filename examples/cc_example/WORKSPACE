@@ -6,6 +6,15 @@ local_repository(
     path = "../..",
 )
 
-load("@rules_flatbuffers//flatbuffers:repositories.bzl", "flatbuffers_dependencies")
+load(
+    "@rules_flatbuffers//flatbuffers:repositories.bzl",
+    "flatbuffers_cc_toolchain",
+    "flatbuffers_dependencies",
+    "flatbuffers_toolchain",
+)
 
 flatbuffers_dependencies()
+
+flatbuffers_toolchain()
+
+flatbuffers_cc_toolchain()

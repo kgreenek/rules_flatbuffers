@@ -1,7 +1,8 @@
 load("//flatbuffers:flatbuffers_lang_toolchain.bzl", "FlatbuffersLangToolchainInfo")
+load("//flatbuffers:flatbuffers_toolchain.bzl", "FlatbuffersToolchainInfo")
+load("//flatbuffers:repositories.bzl", "FLATBUFFERS_TOOLCHAIN", "SCHEMA_LANG_TOOLCHAIN")
 load("//flatbuffers/private:run_flatc.bzl", "run_flatc")
 load("//flatbuffers/private:string_utils.bzl", "replace_extension")
-load("//flatbuffers/toolchains:schema_flatbuffers_toolchain.bzl", "DEFAULT_TOOLCHAIN")
 
 FlatbuffersInfo = provider(fields = {
     "srcs": "srcs fbs files for this target (non-transitive)",
@@ -37,7 +38,8 @@ def _flatbuffers_library_impl(ctx):
     )
     run_flatc(
         ctx = ctx,
-        toolchain = ctx.attr._toolchain[FlatbuffersLangToolchainInfo],
+        fbs_toolchain = ctx.attr._fbs_toolchain[FlatbuffersToolchainInfo],
+        fbs_lang_toolchain = ctx.attr._fbs_lang_toolchain[FlatbuffersLangToolchainInfo],
         srcs = ctx.files.srcs,
         srcs_transitive = srcs_transitive,
         includes_transitive = includes_transitive,
@@ -67,9 +69,13 @@ flatbuffers_library = rule(
         "srcs": attr.label_list(allow_files = True),
         "deps": attr.label_list(providers = [FlatbuffersInfo]),
         "includes": attr.string_list(),
-        "_toolchain": attr.label(
+        "_fbs_toolchain": attr.label(
+            providers = [FlatbuffersToolchainInfo],
+            default = FLATBUFFERS_TOOLCHAIN,
+        ),
+        "_fbs_lang_toolchain": attr.label(
             providers = [FlatbuffersLangToolchainInfo],
-            default = DEFAULT_TOOLCHAIN,
+            default = SCHEMA_LANG_TOOLCHAIN,
         ),
     },
     output_to_genfiles = True,

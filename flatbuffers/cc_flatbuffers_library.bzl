@@ -1,8 +1,9 @@
 load("//flatbuffers:flatbuffers_lang_toolchain.bzl", "FlatbuffersLangToolchainInfo")
+load("//flatbuffers:flatbuffers_toolchain.bzl", "FlatbuffersToolchainInfo")
 load("//flatbuffers:flatbuffers_library.bzl", "FlatbuffersInfo")
 load("//flatbuffers/private:run_flatc.bzl", "run_flatc")
 load("//flatbuffers/private:string_utils.bzl", "replace_extension")
-load("//flatbuffers/toolchains:cc_flatbuffers_toolchain.bzl", "DEFAULT_TOOLCHAIN")
+load("//flatbuffers:repositories.bzl", "FLATBUFFERS_TOOLCHAIN", "CC_LANG_TOOLCHAIN")
 
 DEFAULT_SUFFIX = "_generated"
 CC_HEADER_FILE_EXTENSION = "h"
@@ -30,7 +31,8 @@ def _flatbuffers_cc_info_aspect_impl(target, ctx):
     )
     run_flatc(
         ctx = ctx,
-        toolchain = ctx.attr._toolchain[FlatbuffersLangToolchainInfo],
+        fbs_toolchain = ctx.attr._fbs_toolchain[FlatbuffersToolchainInfo],
+        fbs_lang_toolchain = ctx.attr._fbs_lang_toolchain[FlatbuffersLangToolchainInfo],
         srcs = target[FlatbuffersInfo].srcs,
         srcs_transitive = target[FlatbuffersInfo].srcs_transitive,
         includes_transitive = target[FlatbuffersInfo].includes_transitive,
@@ -47,7 +49,7 @@ def _flatbuffers_cc_info_aspect_impl(target, ctx):
 
 def _cc_flatbuffers_genrule_impl(ctx):
     # Merge the outputs from the hard work already done by the aspect.
-    toolchain = ctx.attr._toolchain[FlatbuffersLangToolchainInfo]
+    toolchain = ctx.attr._fbs_lang_toolchain[FlatbuffersLangToolchainInfo]
     headers_transitive = depset(
         transitive = [dep[FlatbuffersCcInfo].headers_transitive for dep in ctx.attr.deps],
     )
@@ -68,15 +70,17 @@ def _cc_flatbuffers_genrule_impl(ctx):
         ),
     ]
 
-# TODO(kgreenek): Figure out a way to explicitly pass the toolchain here. Currently, only an
-# explicit attribute is allowed here.
 flatbuffers_cc_info_aspect = aspect(
     implementation = _flatbuffers_cc_info_aspect_impl,
     attr_aspects = ["deps"],
     attrs = {
-        "_toolchain": attr.label(
+        "_fbs_toolchain": attr.label(
+            providers = [FlatbuffersToolchainInfo],
+            default = FLATBUFFERS_TOOLCHAIN,
+        ),
+        "_fbs_lang_toolchain": attr.label(
             providers = [FlatbuffersLangToolchainInfo],
-            default = DEFAULT_TOOLCHAIN,
+            default = CC_LANG_TOOLCHAIN,
         ),
     },
 )
@@ -87,17 +91,19 @@ cc_flatbuffers_genrule = rule(
             aspects = [flatbuffers_cc_info_aspect],
             providers = [FlatbuffersInfo],
         ),
-        "_toolchain": attr.label(
+        "_fbs_toolchain": attr.label(
+            providers = [FlatbuffersToolchainInfo],
+            default = FLATBUFFERS_TOOLCHAIN,
+        ),
+        "_fbs_lang_toolchain": attr.label(
             providers = [FlatbuffersLangToolchainInfo],
-            default = DEFAULT_TOOLCHAIN,
+            default = CC_LANG_TOOLCHAIN,
         ),
     },
     output_to_genfiles = True,
     implementation = _cc_flatbuffers_genrule_impl,
 )
 
-# TODO(kgreenek): Support passing a custom toolchain here. This is currently a limitation of
-# using bazel aspects.
 def cc_flatbuffers_library(name, deps, **kwargs):
     genrule_name = name + "_genrule"
     cc_flatbuffers_genrule(
