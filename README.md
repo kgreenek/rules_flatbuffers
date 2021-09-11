@@ -13,14 +13,23 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "rules_flatbuffers",
-    sha256 = "4df20d833902d7e62521247ec2c01488b5b00e22092403e902be88b7a67f4b3e",
-    strip_prefix = "rules_flatbuffers-0.1.0",
-    urls = ["https://github.com/kgreenek/rules_flatbuffers/archive/refs/tags/v0.1.0.tar.gz"],
+    sha256 = "902e649b358846c762829e7aae78db346571ffed7f4a849deebf0f0f69fb398e",
+    strip_prefix = "rules_flatbuffers-0.2.0",
+    urls = ["https://github.com/kgreenek/rules_flatbuffers/archive/refs/tags/v0.2.0.tar.gz"],
 )
 
-load("@rules_flatbuffers//flatbuffers:repositories.bzl", "flatbuffers_dependencies")
+load(
+    "@rules_flatbuffers//flatbuffers:repositories.bzl",
+    "flatbuffers_cc_toolchain",
+    "flatbuffers_dependencies",
+    "flatbuffers_toolchain",
+)
 
 flatbuffers_dependencies()
+
+flatbuffers_toolchain()
+
+flatbuffers_cc_toolchain()
 ```
 
 ## Usage
@@ -46,9 +55,7 @@ For example, if we create a second fbs file called bar.fbs that includes foo.fbs
 flatbuffers_library(
     name = "bar_fbs",
     srcs = ["bar.fbs"],
-    deps = [
-        ":foo_fbs",
-    ],
+    deps = [":foo_fbs"],
 )
 ```
 
@@ -63,9 +70,7 @@ load("@rules_flatbuffers//flatbuffers:cc_flatbuffers_library.bzl", "cc_flatbuffe
 
 cc_flatbuffers_library(
     name = "foo_cc_fbs",
-    deps = [
-        ":foo_fbs",
-    ],
+    deps = [":foo_fbs"],
 )
 ```
 
