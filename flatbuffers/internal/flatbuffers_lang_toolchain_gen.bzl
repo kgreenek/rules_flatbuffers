@@ -18,7 +18,7 @@ flatbuffers_lang_toolchain_gen = repository_rule(
         "flatc_args": attr.string_list(),
         "runtime": attr.string(),
         "_build_tpl": attr.label(
-            default = "@rules_flatbuffers//flatbuffers/private:BUILD.lang_toolchain.tpl",
+            default = "@rules_flatbuffers//flatbuffers/internal:BUILD.lang_toolchain.tpl",
         ),
     },
     doc = "Creates the Flatbuffer toolchain that will be used by all flatbuffer_library targets",

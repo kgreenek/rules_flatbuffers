@@ -1,7 +1,7 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
-load("//flatbuffers/private:flatbuffers_lang_toolchain_gen.bzl", "flatbuffers_lang_toolchain_gen")
-load("//flatbuffers/private:flatbuffers_toolchain_gen.bzl", "flatbuffers_toolchain_gen")
+load("//flatbuffers/internal:flatbuffers_lang_toolchain_gen.bzl", "flatbuffers_lang_toolchain_gen")
+load("//flatbuffers/internal:flatbuffers_toolchain_gen.bzl", "flatbuffers_toolchain_gen")
 
 DEFAULT_FLATC = "@com_github_google_flatbuffers//:flatc"
 

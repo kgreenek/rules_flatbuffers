@@ -16,7 +16,7 @@ flatbuffers_toolchain_gen = repository_rule(
             executable = True,
         ),
         "_build_tpl": attr.label(
-            default = "@rules_flatbuffers//flatbuffers/private:BUILD.toolchain.tpl",
+            default = "@rules_flatbuffers//flatbuffers/internal:BUILD.toolchain.tpl",
         ),
     },
     doc = "Creates the Flatbuffer toolchain that will be used by all flatbuffer_library targets",

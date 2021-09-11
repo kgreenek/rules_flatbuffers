@@ -1,8 +1,8 @@
 load("//flatbuffers:flatbuffers_lang_toolchain.bzl", "FlatbuffersLangToolchainInfo")
 load("//flatbuffers:flatbuffers_toolchain.bzl", "FlatbuffersToolchainInfo")
 load("//flatbuffers:flatbuffers_library.bzl", "FlatbuffersInfo")
-load("//flatbuffers/private:run_flatc.bzl", "run_flatc")
-load("//flatbuffers/private:string_utils.bzl", "replace_extension")
+load("//flatbuffers/internal:run_flatc.bzl", "run_flatc")
+load("//flatbuffers/internal:string_utils.bzl", "replace_extension")
 load("//flatbuffers:repositories.bzl", "FLATBUFFERS_TOOLCHAIN", "CC_LANG_TOOLCHAIN")
 
 DEFAULT_SUFFIX = "_generated"

@@ -1,4 +1,4 @@
-load("//flatbuffers/private:string_utils.bzl", "capitalize_first_char")
+load("//flatbuffers/internal:string_utils.bzl", "capitalize_first_char")
 
 def _include_args_from_depset(includes_depset):
     # Always include the workspace root.
