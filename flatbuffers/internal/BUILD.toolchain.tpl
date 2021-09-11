@@ -1,4 +1,4 @@
-load("@rules_flatbuffers//flatbuffers:flatbuffers_toolchain.bzl", "flatbuffers_toolchain")
+load("@rules_flatbuffers//flatbuffers/internal:flatbuffers_toolchain.bzl", "flatbuffers_toolchain")
 
 flatbuffers_toolchain(
     name = "toolchain",

@@ -2,32 +2,25 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load("//flatbuffers/internal:flatbuffers_lang_toolchain_gen.bzl", "flatbuffers_lang_toolchain_gen")
 load("//flatbuffers/internal:flatbuffers_toolchain_gen.bzl", "flatbuffers_toolchain_gen")
-
-DEFAULT_FLATC = "@com_github_google_flatbuffers//:flatc"
-
-FLATBUFFERS_TOOLCHAIN_REPO = "rules_flatbuffers_toolchain"
-FLATBUFFERS_TOOLCHAIN = "@" + FLATBUFFERS_TOOLCHAIN_REPO + "//toolchain"
-
-SCHEMA_LANG_REPO = "rules_flatbuffers_schema_toolchain"
-SCHEMA_LANG_TOOLCHAIN = "@" + SCHEMA_LANG_REPO + "//toolchain"
-SCHEMA_LANG_SHORTNAME = "schema"
-SCHEMA_LANG_FLATC_ARGS = ["-b", "--schema"]
-
-CC_LANG_REPO = "rules_flatbuffers_cc_toolchain"
-CC_LANG_TOOLCHAIN = "@" + CC_LANG_REPO + "//toolchain"
-CC_LANG_SHORTNAME = "cc"
-CC_LANG_DEFAULT_RUNTIME = "@com_github_google_flatbuffers//:flatbuffers"
-CC_LANG_FLATC_ARGS = [
-    "--cpp",
-    # This is necessary to preserve the directory hierarchy for generated headers to be relative to
-    # the workspace root as bazel expects.
-    "--keep-prefix",
-]
-CC_LANG_DEFAULT_EXTRA_FLATC_ARGS = [
-    "--gen-mutable",
-    "--gen-name-strings",
-    "--reflect-names",
-]
+load(
+    "//flatbuffers/toolchain_defs:cc_defs.bzl",
+    "CC_LANG_DEFAULT_EXTRA_FLATC_ARGS",
+    "CC_LANG_DEFAULT_RUNTIME",
+    "CC_LANG_FLATC_ARGS",
+    "CC_LANG_REPO",
+    "CC_LANG_SHORTNAME",
+)
+load(
+    "//flatbuffers/toolchain_defs:schema_defs.bzl",
+    "SCHEMA_LANG_FLATC_ARGS",
+    "SCHEMA_LANG_REPO",
+    "SCHEMA_LANG_SHORTNAME",
+)
+load(
+    "//flatbuffers/toolchain_defs:toolchain_defs.bzl",
+    "FLATBUFFERS_TOOLCHAIN_DEFAULT_FLATC",
+    "FLATBUFFERS_TOOLCHAIN_REPO",
+)
 
 def flatbuffers_dependencies():
     maybe(
@@ -42,7 +35,7 @@ def flatbuffers_dependencies():
         ],
     )
 
-def flatbuffers_toolchain(flatc = DEFAULT_FLATC):
+def flatbuffers_toolchain(flatc = FLATBUFFERS_TOOLCHAIN_DEFAULT_FLATC):
     flatbuffers_toolchain_gen(
         name = FLATBUFFERS_TOOLCHAIN_REPO,
         flatc = flatc,

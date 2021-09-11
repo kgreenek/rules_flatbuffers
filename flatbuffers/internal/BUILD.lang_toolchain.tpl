@@ -1,5 +1,5 @@
 load(
-    "@rules_flatbuffers//flatbuffers:flatbuffers_lang_toolchain.bzl",
+    "@rules_flatbuffers//flatbuffers/internal:flatbuffers_lang_toolchain.bzl",
     "flatbuffers_lang_toolchain",
 )
 
